@@ -145,7 +145,9 @@ class ORDMCP:
         if message is None:
             return await self.bot.say('You must specify a search term')
         
-        if not self.update_csvs():
+        csv_check = await self.update_csvs()
+        
+        if not csv_check:
             return await self.bot.say('There was an error downloading the csv files from mcp')
         
         fieldsResults = await self.search_csv("data/ordmcp/fields.csv", message)
