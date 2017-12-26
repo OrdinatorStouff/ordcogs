@@ -21,6 +21,9 @@ from cogs.utils.settings import Settings
 __author__ = "Ordinator"
 
 
+
+
+
 class ORDMCP:
     """Custom basic MCP search by Ordinator"""
 
@@ -92,8 +95,9 @@ class ORDMCP:
             if self.maxDataAgeMinutes < 1:
                 self.maxDataAgeMinutes = 180
         
-        age_delta = datetime.datetime.now() - self.timestamp
-        if (age_delta.total_seconds() * 60 < self.maxDataAgeMinutes):
+        age_delta = epoch_now() - self.timestamp
+        
+        if (age_delta < self.maxDataAgeMinutes):
             return true
         
         if download_file(self.settings['fields'], "data/ordmcp/fields_dl.csv"):
@@ -180,7 +184,16 @@ class ORDMCP:
         elif (method.lower() == "params"):
             return
 
-
+def epoch_now():
+    """
+    Creates an integer representing current timestamp from epoch date
+    Returns a value where 1 = one minute    
+    """
+    
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    now = datetime.datetime.utcnow()
+    delta = now - epoch
+    return int(delta.total_seconds() / 60)
 
 
 def check_folder():
@@ -195,7 +208,7 @@ def check_file():
             'methods': 'http://export.mcpbot.bspk.rs/methods.csv',
             'params': 'http://export.mcpbot.bspk.rs/params.csv', 
             'maxDataAgeMinutes': 240,
-            'timestamp': datetime.datetime.now()
+            'timestamp': epoch_now()
             }
     f = "data/ordmcp/settings.json"
     if not dataIO.is_valid_json(f):
