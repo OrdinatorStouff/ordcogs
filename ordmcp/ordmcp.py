@@ -120,7 +120,7 @@ class ORDMCP:
         
         return True
         
-    def search_csv(csvfile, searchterm):
+    def search_csv(self, csvfile, searchterm):
         results = []
         with open(csvfile) as f:
             reader = csv.reader(f)
