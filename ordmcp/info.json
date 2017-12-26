@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Ordinator#9256",
+    "NAME" : "OrdMCP",
+    "SHORT" : "Search MCP for function names/descriptions",
+    "INSTALL_MSG" : "Enjoy, and don't forget to update the list first with `steamupdate`. Be also aware this cog uses some cpu time when searching!",
+    "DESCRIPTION" : "Search for functions, methods or parameters in the Minecraft Coder Pack (MCP) database.",
+    "TAGS": ["MCP", "ord", "Ordinator", "Minecraft"]
+}
