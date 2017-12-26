@@ -48,14 +48,14 @@ class ORDMCP:
                 return True
         return False
 
-    def remove_file(filename):
+    def remove_file(self, filename):
         try:
             os.remove(filename)
         except OSError as e: # this would be "except OSError, e:" before Python 2.6
             if e.errno != errno.ENOENT: # errno.ENOENT = no such file or directory
                 raise # re-raise exception if a different error occurred
 
-    def download_file(url, filepath):
+    def download_file(self, url, filepath):
         try:
             r = requests.get(url, allow_redirects=True)
             open(filepath, 'wb').write(r.content)
@@ -100,20 +100,20 @@ class ORDMCP:
         if (age_delta < self.maxDataAgeMinutes):
             return True
         
-        if download_file(self.settings['fields'], "data/ordmcp/fields_dl.csv"):
-            remove_file("data/ordmcp/fields.csv")
+        if self.download_file(self, self.settings['fields'], "data/ordmcp/fields_dl.csv"):
+            self.remove_file(self, "data/ordmcp/fields.csv")
             os.rename("data/ordmcp/fields_dl.csv", "data/ordmcp/fields.csv")
         else:
             return False
         
-        if download_file(self.settings['methods'], "data/ordmcp/methods_dl.csv"):
-            remove_file("data/ordmcp/methods.csv")
+        if self.download_file(self, self.settings['methods'], "data/ordmcp/methods_dl.csv"):
+            self.remove_file(self, "data/ordmcp/methods.csv")
             os.rename("data/ordmcp/methods_dl.csv", "data/ordmcp/methods.csv")        
         else:
             return False
         
-        if download_file(self.settings['params'], "data/ordmcp/params_dl.csv"):
-            remove_file("data/ordmcp/params.csv")
+        if self.download_file(self, self.settings['params'], "data/ordmcp/params_dl.csv"):
+            self.remove_file(self, "data/ordmcp/params.csv")
             os.rename("data/ordmcp/params_dl.csv", "data/ordmcp/params.csv")
         else:
             return False
