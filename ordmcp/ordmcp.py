@@ -165,11 +165,11 @@ def check_folder():
 
 
 def check_file():
-    data = {'data_files': {
+    data = {'data_files': [
                 'http://export.mcpbot.bspk.rs/fields.csv', 
                 'http://export.mcpbot.bspk.rs/methods.csv',
                 'http://export.mcpbot.bspk.rs/params.csv'
-                },
+                ],
             'maxDataAgeMinutes': 240,
             'timestamp': epoch_now()
             }
