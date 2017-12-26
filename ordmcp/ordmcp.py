@@ -13,15 +13,13 @@ from cogs.utils.dataIO import dataIO
 from cogs.utils.chat_formatting import box, pagify, escape_mass_mentions
 from random import choice
 from copy import deepcopy
+from urllib.parse import urlparse
 from cogs.utils.settings import Settings
 
 #TODO -- many imports here are not needed, trim list
 
 
 __author__ = "Ordinator"
-
-
-
 
 
 class ORDMCP:
@@ -31,58 +29,51 @@ class ORDMCP:
         self.bot = bot
         self.settings_file = 'data/ordmcp/settings.json'
         self.settings = dataIO.load_json(self.settings_file)
+        
+        """ # OLD CODE
         if 'fields' in list(self.settings.keys()):
             self.fieldsUrl = self.settings['fields']
         if 'methods' in list(self.settings.keys()):
             self.methodUrl = self.settings['methods']
         if 'params' in list(self.settings.keys()):
             self.paramsUrl = self.settings['params']
-        if 'timestamp' in list(self.settings.keys()):
-            self.timestamp = self.settings['timestamp']
-        if 'maxDataAgeMinutes' in list(self.settings.keys()):
-            self.maxDataAgeMinutes = self.settings['maxDataAgeMinutes']
-            
+        """
+        
+        self.data_files = self.settings['data_files']
+        self.maxDataAgeMinutes = self.settings['maxDataAgeMinutes']
+        self.timestamp = self.settings['timestamp']
+        
+        # default data age setting if too low or missing
+        if isInt(self.maxDataAgeMinutes):
+            if int(self.maxDataAgeMinutes) < 1:
+                self.maxDataAgeMinutes = 180
+        else:
+            self.maxDataAgeMinutes = 180
+    
+    
     def is_command(self, msg):
         for m in self.bot.settings.get_prefixes(msg.server):
             if msg.content.startswith(m):
                 return True
         return False
 
-    def remove_file(self, filename):
+    
+    async def remove_file(self, filename):
         try:
             os.remove(filename)
         except OSError as e: # this would be "except OSError, e:" before Python 2.6
             if e.errno != errno.ENOENT: # errno.ENOENT = no such file or directory
                 raise # re-raise exception if a different error occurred
 
-    def download_file(self, url, filepath):
-        try:
-            r = requests.get(url, allow_redirects=True)
-            open(filepath, 'wb').write(r.content)
-        except:
-            return false
-            raise
-            
-        return True
 
-    async def on_message(self, message): #currently boilerplate
-        channel = message.channel
-        author = message.author
-        server = message.server
-        
-        if self.is_command(message):
-            return
-        
-        if message.server is None:
-            return
-        
-        if author == self.bot.user:
-            return
-        
-        if not user_allowed(message):
-            return
-        
-        return
+    async def download(self, url, fileName):
+        """ https://stackoverflow.com/questions/862173/how-to-download-a-file-using-python-in-a-smarter-way """
+        r = urllib2.urlopen(urllib2.Request(url))
+        try:
+            with open(fileName, 'wb') as f:
+                shutil.copyfileobj(r,f)
+        finally:
+            r.close()
         
         
     async def update_csvs(self):
@@ -90,35 +81,23 @@ class ORDMCP:
         
         self.timestamp = self.settings['timestamp']
         self.maxDataAgeMinutes = self.settings['maxDataAgeMinutes']
-        
-        if not self.maxDataAgeMinutes:
-            if self.maxDataAgeMinutes < 1:
-                self.maxDataAgeMinutes = 180
-        
+
         age_delta = epoch_now() - self.timestamp
         
         if (age_delta < self.maxDataAgeMinutes):
             return True
+            
+        print('Updating MCP data file extracts...')
         
-        if self.download_file(self, self.settings['fields'], "data/ordmcp/fields_dl.csv"):
-            self.remove_file(self, "data/ordmcp/fields.csv")
-            os.rename("data/ordmcp/fields_dl.csv", "data/ordmcp/fields.csv")
-        else:
-            return False
-        
-        if self.download_file(self, self.settings['methods'], "data/ordmcp/methods_dl.csv"):
-            self.remove_file(self, "data/ordmcp/methods.csv")
-            os.rename("data/ordmcp/methods_dl.csv", "data/ordmcp/methods.csv")        
-        else:
-            return False
-        
-        if self.download_file(self, self.settings['params'], "data/ordmcp/params_dl.csv"):
-            self.remove_file(self, "data/ordmcp/params.csv")
-            os.rename("data/ordmcp/params_dl.csv", "data/ordmcp/params.csv")
-        else:
-            return False
-        
+        for url in self.data_files:
+            fileName = fileName or os.path.basename(urlparse.urlsplit(url)[2])
+            tempName = fileName + ".tmp"
+            await download(url, tempName)
+            self.remove_file(self, fileName)
+            os.rename(tempName, fileName)
+
         return True
+
         
     async def search_csv(self, csvfile, searchterm):
         results = []
@@ -130,6 +109,7 @@ class ORDMCP:
                     if searchterm in field:
                         results.append(row)
         return results
+
 
     @commands.command(no_pm=True, pass_context=True)
     #@checks.admin_or_permissions(manage_roles=True)
@@ -159,28 +139,6 @@ class ORDMCP:
         return await self.bot.say(response)
 
 
-    @commands.command(no_pm=True, pass_context=True)
-    #@checks.admin_or_permissions(manage_roles=True)
-    async def mcp2(self, ctx, method, rolename, message=None):
-        """STILL IN TESTING/DEVELOPMENT"""
-        
-        author = ctx.message.author
-        channel = ctx.message.channel
-        server = ctx.message.server
-
-        if message is None:
-            return
-        
-        if methods.lower() not in {"fields", "methods", "params"}:
-            return await self.bot.say('You must specify either "fields", "methods", or "params"')
-        
-        if (methods.lower() == "fields"):
-            return
-        elif (methods.lower() == "methods"):
-            return
-        elif (methods.lower() == "params"):
-            return
-
 def epoch_now():
     """
     Creates an integer representing current timestamp from epoch date
@@ -193,6 +151,12 @@ def epoch_now():
     return int(delta.total_seconds() / 60)
 
 
+def isInt(v):
+    try:     i = int(v)
+    except:  return False
+    return True
+
+
 def check_folder():
     theDir = "data/ordmcp"
     if not os.path.exists(theDir):
@@ -201,9 +165,11 @@ def check_folder():
 
 
 def check_file():
-    data = {'fields': 'http://export.mcpbot.bspk.rs/fields.csv', 
-            'methods': 'http://export.mcpbot.bspk.rs/methods.csv',
-            'params': 'http://export.mcpbot.bspk.rs/params.csv', 
+    data = {'data_files': {
+                'http://export.mcpbot.bspk.rs/fields.csv', 
+                'http://export.mcpbot.bspk.rs/methods.csv',
+                'http://export.mcpbot.bspk.rs/params.csv'
+                },
             'maxDataAgeMinutes': 240,
             'timestamp': epoch_now()
             }
@@ -211,7 +177,6 @@ def check_file():
     if not dataIO.is_valid_json(f):
         print("Creating default settings.json...")
         dataIO.save_json(f, data)
-
 
 
 def setup(bot):
