@@ -148,9 +148,9 @@ class ORDMCP:
         if not self.update_csvs():
             return await self.bot.say('There was an error downloading the csv files from mcp')
         
-        fieldsResults = self.search_csv("data/ordmcp/fields.csv", message)
-        methodsResults = self.search_csv("data/ordmcp/methods.csv", message)
-        paramsResults = self.search_csv("data/ordmcp/params.csv", message)
+        fieldsResults = await self.search_csv("data/ordmcp/fields.csv", message)
+        methodsResults = await self.search_csv("data/ordmcp/methods.csv", message)
+        paramsResults = await self.search_csv("data/ordmcp/params.csv", message)
         
         response = "Found the following: \nFields:```\n{}\n```\nMethods:```\n{}\n```\nFields:```\n{}\n```".format("\n".join(fieldsResults), "\n".join(methodsResults), "\n".join(paramsResults))
         
