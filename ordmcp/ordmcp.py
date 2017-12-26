@@ -85,7 +85,7 @@ class ORDMCP:
         return
         
         
-    def update_csvs(self):
+    async def update_csvs(self):
         """ Download/update CSVs if so much time has passed since last update """
         
         self.timestamp = self.settings['timestamp']
@@ -120,7 +120,7 @@ class ORDMCP:
         
         return True
         
-    def search_csv(self, csvfile, searchterm):
+    async def search_csv(self, csvfile, searchterm):
         results = []
         with open(csvfile) as f:
             reader = csv.reader(f)
