@@ -63,7 +63,7 @@ class ORDMCP:
             return false
             raise
             
-        return true
+        return True
 
     async def on_message(self, message): #currently boilerplate
         channel = message.channel
@@ -98,27 +98,27 @@ class ORDMCP:
         age_delta = epoch_now() - self.timestamp
         
         if (age_delta < self.maxDataAgeMinutes):
-            return true
+            return True
         
         if download_file(self.settings['fields'], "data/ordmcp/fields_dl.csv"):
             remove_file("data/ordmcp/fields.csv")
             os.rename("data/ordmcp/fields_dl.csv", "data/ordmcp/fields.csv")
         else:
-            return false
+            return False
         
         if download_file(self.settings['methods'], "data/ordmcp/methods_dl.csv"):
             remove_file("data/ordmcp/methods.csv")
             os.rename("data/ordmcp/methods_dl.csv", "data/ordmcp/methods.csv")        
         else:
-            return false
+            return False
         
         if download_file(self.settings['params'], "data/ordmcp/params_dl.csv"):
             remove_file("data/ordmcp/params.csv")
             os.rename("data/ordmcp/params_dl.csv", "data/ordmcp/params.csv")
         else:
-            return false
+            return False
         
-        return true
+        return True
         
     def search_csv(csvfile, searchterm):
         results = []
