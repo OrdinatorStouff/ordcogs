@@ -157,14 +157,11 @@ class ORDMCP:
         
         return await self.bot.say(response)
 
+
     @commands.command(no_pm=True, pass_context=True)
     #@checks.admin_or_permissions(manage_roles=True)
     async def mcp2(self, ctx, method, rolename, message=None):
-        """Adds a role to multiple users,
-        
-        rolebulk <add/remove> <"rollname"> <@mention1, @mention2, ...>
-
-        Role name must be in quotes if there are spaces."""
+        """STILL IN TESTING/DEVELOPMENT"""
         
         author = ctx.message.author
         channel = ctx.message.channel
@@ -177,13 +174,15 @@ class ORDMCP:
             return await self.bot.say('You must specify either "fields", "methods", or "params"')
         
         if (method.lower() == "fields"):
-            addbool = True
+            return
         elif (method.lower() == "methods"):
-            addbool = False
+            return
         elif (method.lower() == "params"):
+            return
 
-            
-            
+
+
+
 def check_folder():
     theDir = "data/ordmcp"
     if not os.path.exists(theDir):
