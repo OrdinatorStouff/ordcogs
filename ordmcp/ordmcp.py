@@ -86,6 +86,12 @@ class ORDMCP:
         """ Download/update CSVs if so much time has passed since last update """
         
         self.timestamp = self.settings['timestamp']
+        self.maxDataAgeMinutes = self.settings['maxDataAgeMinutes']
+        
+        if not self.maxDataAgeMinutes:
+            if self.maxDataAgeMinutes < 1:
+                self.maxDataAgeMinutes = 180
+        
         delta = datetime.datetime.now() - self.timestamp
         if delta.total_seconds() * 60 < self.maxDataAgeMinutes
             return true
