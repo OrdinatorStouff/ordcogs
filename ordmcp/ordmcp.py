@@ -34,7 +34,7 @@ class ORDMCP:
         if 'fields' in list(self.settings.keys()):
             self.fieldsUrl = self.settings['fields']
         if 'methods' in list(self.settings.keys()):
-            self.methodUrl = self.settings['method']
+            self.methodUrl = self.settings['methods']
         if 'params' in list(self.settings.keys()):
             self.paramsUrl = self.settings['params']
         if 'timestamp' in list(self.settings.keys()):
