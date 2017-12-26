@@ -147,8 +147,10 @@ class ORDMCP:
         if message is None:
             return await self.bot.say('You must specify a search term')
         
+        """
         if methods.lower() not in {"fields", "methods", "params"}:
             return await self.bot.say('You must specify either "fields", "methods", or "params"')
+        """
         
         if not update_csvs():
             return await self.bot.say('There was an error downloading the csv files from mcp')
