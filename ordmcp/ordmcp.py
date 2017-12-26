@@ -134,11 +134,9 @@ class ORDMCP:
     @commands.command(no_pm=True, pass_context=True)
     #@checks.admin_or_permissions(manage_roles=True)
     async def mcp(self, ctx, message=None):
-        """Adds a role to multiple users,
-        
-        rolebulk <add/remove> <"rollname"> <@mention1, @mention2, ...>
-
-        Role name must be in quotes if there are spaces."""
+        """
+            Searches MCP across all 3 csvs at the same time
+        """
         
         author = ctx.message.author
         channel = ctx.message.channel
@@ -147,17 +145,12 @@ class ORDMCP:
         if message is None:
             return await self.bot.say('You must specify a search term')
         
-        """
-        if methods.lower() not in {"fields", "methods", "params"}:
-            return await self.bot.say('You must specify either "fields", "methods", or "params"')
-        """
-        
-        if not update_csvs():
+        if not self.update_csvs():
             return await self.bot.say('There was an error downloading the csv files from mcp')
         
-        fieldsResults = search_csv("data/ordmcp/fields.csv", message)
-        methodsResults = search_csv("data/ordmcp/methods.csv", message)
-        paramsResults = search_csv("data/ordmcp/params.csv", message)
+        fieldsResults = self.search_csv("data/ordmcp/fields.csv", message)
+        methodsResults = self.search_csv("data/ordmcp/methods.csv", message)
+        paramsResults = self.search_csv("data/ordmcp/params.csv", message)
         
         response = "Found the following: \nFields:```\n{}\n```\nMethods:```\n{}\n```\nFields:```\n{}\n```".format("\n".join(fieldsResults), "\n".join(methodsResults), "\n".join(paramsResults))
         
