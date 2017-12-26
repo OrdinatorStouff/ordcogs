@@ -92,8 +92,8 @@ class ORDMCP:
             if self.maxDataAgeMinutes < 1:
                 self.maxDataAgeMinutes = 180
         
-        delta = datetime.datetime.now() - self.timestamp
-        if delta.total_seconds() * 60 < self.maxDataAgeMinutes
+        age_delta = datetime.datetime.now() - self.timestamp
+        if (age_delta.total_seconds() * 60 < self.maxDataAgeMinutes):
             return true
         
         if download_file(self.settings['fields'], "data/ordmcp/fields_dl.csv"):
