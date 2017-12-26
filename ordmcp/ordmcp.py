@@ -147,7 +147,7 @@ class ORDMCP:
         if message is None:
             return await self.bot.say('You must specify a search term')
         
-        if method.lower() not in {"fields", "methods", "params"}:
+        if methods.lower() not in {"fields", "methods", "params"}:
             return await self.bot.say('You must specify either "fields", "methods", or "params"')
         
         if not update_csvs():
@@ -174,14 +174,14 @@ class ORDMCP:
         if message is None:
             return
         
-        if method.lower() not in {"fields", "methods", "params"}:
+        if methods.lower() not in {"fields", "methods", "params"}:
             return await self.bot.say('You must specify either "fields", "methods", or "params"')
         
-        if (method.lower() == "fields"):
+        if (methods.lower() == "fields"):
             return
-        elif (method.lower() == "methods"):
+        elif (methods.lower() == "methods"):
             return
-        elif (method.lower() == "params"):
+        elif (methods.lower() == "params"):
             return
 
 def epoch_now():
