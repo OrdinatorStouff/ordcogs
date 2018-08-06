@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Ordinator#9256",
+    "NAME" : "ordcustom",
+    "SHORT" : "totally random misc crap",
+    "INSTALL_MSG" : "Hope it's more useful than it is buggy...",
+    "DESCRIPTION" : "Custom stuff specifically for Ord's own servers / use",
+    "TAGS": ["ord", "Ordinator", "custom"]
+}
