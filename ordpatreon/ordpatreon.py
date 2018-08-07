@@ -38,8 +38,7 @@ class Patreon():
 
     def get_menu(self):
         return Menu(self.bot)
-    
-    @app.route('/oauth/redirect')
+
     def authenticate(self):
         """Authenticate with Patreon API"""
         oauth_client = patreon.OAuth(self.client_id, self.client_secret)
