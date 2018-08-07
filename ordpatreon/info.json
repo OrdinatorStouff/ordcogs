@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Ordinator#9256",
+    "NAME" : "ordpatreon",
+    "SHORT" : "Cog for managing Patreon API",
+    "INSTALL_MSG" : "still early development",
+    "DESCRIPTION" : "Interact with Patreon API",
+    "TAGS": ["ord", "Ordinator", "patreon"]
+}
