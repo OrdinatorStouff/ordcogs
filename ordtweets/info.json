@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Ordinator#9256",
+    "NAME" : "ordtweets",
+    "SHORT" : "Cog for tweeting and Twittering",
+    "INSTALL_MSG" : "Have fun tweeting, report errors if any to github please",
+    "DESCRIPTION" : "Interact with Twitter API including posting Tweets and re-tweeting",
+    "TAGS": ["ord", "Ordinator", "twitter", "tweet", "tweets"]
+}
