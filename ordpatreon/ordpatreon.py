@@ -47,7 +47,28 @@ class Patreon():
         api_client = patreon.API(access_token)
         return api_client
 
-
+    @commands.command(pass_context=True)
+    @checks.mod_or_permissions(manage_server=True)
+    async def pattest1(self, ctx):
+        """Patreon Test Command"""
+        
+        #setup working vars, mostly just for convenience
+        message = ctx.message
+        channel = message.channel
+        author = message.author
+        author_name = author.name if author.name else author.display_name 
+        msg_time = message.timestamp.strftime("%Y-%m-%d %H:%M UTC")
+        
+        api_client = self.authenticate()
+        user_response = api_client.fetch_user()
+        user = user_response.data()
+        pledges = user.relationship('pledges')
+        pledge = pledges[0] if pledges and len(pledges) > 0 else None
+        
+        await self.bot.say(user)
+        await self.bot.say(pledge)
+        
+        return
 
 
 
