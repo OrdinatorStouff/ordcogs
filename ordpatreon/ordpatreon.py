@@ -29,14 +29,12 @@ class Patreon():
         self.menu = self.get_menu()
         self.settings_file = 'data/ordpatreon/settings.json'
         self.settings = dataIO.load_json(self.settings_file)
-        #if 'consumer_key' in list(self.settings.keys()):
-        #    self.consumer_key = self.settings['consumer_key']
-        #if 'consumer_secret' in list(self.settings.keys()):
-        #    self.consumer_secret = self.settings['consumer_secret']
-        #if 'access_token' in list(self.settings.keys()):
-        #    self.access_token = self.settings['access_token']
-        #if 'access_secret' in list(self.settings.keys()):
-        #    self.access_secret = self.settings['access_secret']
+        #if 'client_id' in list(self.settings.keys()):
+        #    self.client_id = self.settings['client_id']
+        #if 'client_secret' in list(self.settings.keys()):
+        #    self.client_secret = self.settings['client_secret']
+        #if 'creator_id' in list(self.settings.keys()):
+        #    self.creator_id = self.settings['creator_id']
 
     def get_menu(self):
         return Menu(self.bot)
@@ -60,8 +58,8 @@ def check_folder():
 
 
 def check_file():
-    # data = {'consumer_key': '', 'consumer_secret': '',
-    #        'access_token': '', 'access_secret': '', 'servers': {}}
+    # data = {'client_id': '', 'client_secret': '',
+    #        'creator_id': '', 'servers': {}}
     f = "data/ordpatreon/settings.json"
     if not dataIO.is_valid_json(f):
         print("Creating default settings.json...")
